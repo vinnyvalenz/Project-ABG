@@ -1,0 +1,34 @@
+  Name                Size                        Bytes  Class     Attributes
+
+  featuresTrain      14x14x96x7891            593908224  single              
+  Name                  Size              Bytes  Class     Attributes
+
+  featuresTrain      7891x96            3030144  single              
+
+t1
+accuracy = 0.8700
+fScore = 1×4    
+    0.9400    0.8197    0.9485    0.7654
+
+avg_f_score = 0.8684
+
+t2
+accuracy = 0.8150
+fScore = 1×4    
+    0.8298    0.8070    0.8077    0.8182
+
+avg_f_score = 0.8157
+
+t3
+accuracy = 0.8150
+fScore = 1×4    
+    0.8211    0.7928    0.8235    0.8261
+
+avg_f_score = 0.8159
+
+t4
+accuracy = 0.9650
+fScore = 1×4    
+    0.9796    0.9434    0.9697    0.9691
+
+avg_f_score = 0.9654
