@@ -4,7 +4,7 @@ param: dirName
 takes the directory name, and recreates the
 a data split
 
-returns 3 image.
+returns 3 image stores.
 
 Saves image datastore to file datasplit.mat
 
