@@ -28,12 +28,19 @@ function [accuracies, svms] = getSvms(net,network,l,seed)
 
     % layer + features
     layer = net.Layers(l).Name;
-    featuresTrain = activations(net,train_audIMDS,layer,'ExecutionEnvironment',"auto");
-    featuresTest = activations(net,test_audIMDS,layer,'ExecutionEnvironment',"auto");
     
-    featuresTrain = squeeze(mean(featuresTrain,[1 2]))';
-    featuresTest = squeeze(mean(featuresTest,[1 2]))';
-    
+    if ~contains(layer, 'pool')
+   
+        featuresTrain = activations(net,train_audIMDS,layer,'ExecutionEnvironment',"auto");
+        featuresTest = activations(net,test_audIMDS,layer,'ExecutionEnvironment',"auto");
+        whos featuresTrain
+
+        featuresTrain = squeeze(mean(featuresTrain,[1 2]))';
+        featuresTest = squeeze(mean(featuresTest,[1 2]))';
+    else
+        featuresTrain = activations(net,train_audIMDS,layer,'ExecutionEnvironment',"auto","OutputAs","rows");
+        featuresTest = activations(net,test_audIMDS,layer,'ExecutionEnvironment',"auto","OutputAs","rows");
+    end
     
 % SVM templates 
         
