@@ -14,14 +14,19 @@ function [] = netFeatureSVM()
     end
     
     hgstAcc = 0;
-    lwstAcc = 100;
+    lwstAcc = 1;
     hgstSvm = "";
     lwstSvm = "";
     
     for s=1:size(seeds,2)
         
         data_name = "svm_data_"+network+"/datastore/"+network+"_DS_s"+num2str(seeds(s));
-        [trainingSet, validationSet, testingSet] = getOrginalDataSplits(dir,seeds(s),data_name);
+        [training_Set, validation_Set, testing_Set] = getOriginalDataSplits(dir,seeds(s),data_name);
+        
+%         % Uncomment for OVER SAMPLING training set
+%         training_Set = OverSampleTrainingSet(training_Set);
+%         % Re-save the datastore
+%         save(data_name, 'training_Set','validation_Set','testing_Set');
 
         for l=1:size(layers,2)
             [acc svm] = getSvms(net,network,layers(l),seeds(s));
