@@ -28,12 +28,21 @@ function [accuracies, svms] = getSvms(net,network,l,seed)
 
     % layer + features
     layer = net.Layers(l).Name;
-    featuresTrain = activations(net,train_audIMDS,layer,'ExecutionEnvironment',"auto");
-    featuresTest = activations(net,test_audIMDS,layer,'ExecutionEnvironment',"auto");
     
-    featuresTrain = squeeze(mean(featuresTrain,[1 2]))';
-    featuresTest = squeeze(mean(featuresTest,[1 2]))';
-    
+    if ~contains(layer, 'pool')
+   
+        featuresTrain = activations(net,train_audIMDS,layer,'ExecutionEnvironment',"auto");
+        featuresTest = activations(net,test_audIMDS,layer,'ExecutionEnvironment',"auto");
+        whos featuresTrain
+
+        featuresTrain = squeeze(mean(featuresTrain,[1 2]))';
+        featuresTest = squeeze(mean(featuresTest,[1 2]))';
+        whos featuresTrain
+    else
+        featuresTrain = activations(net,train_audIMDS,layer,'ExecutionEnvironment',"auto","OutputAs","rows");
+        featuresTest = activations(net,test_audIMDS,layer,'ExecutionEnvironment',"auto","OutputAs","rows");
+        whos featuresTrain
+    end
     
 % SVM templates 
         
@@ -71,7 +80,11 @@ function [accuracies, svms] = getSvms(net,network,l,seed)
 % Classify, Predict, Confusion Matrices and F-Scores
     
     % Vars to record best performing
-    accuracies = zeros(1,4);
+    accuracies = zeros(1,3);
+    svms(1) = "";
+    svms(2) = "";
+    svms(3) = "";
+   
     
     kernel = ["linear" "polynomial" "gaussian"];
     layer_name = strrep(layer,'_',' ');
@@ -93,10 +106,10 @@ function [accuracies, svms] = getSvms(net,network,l,seed)
     accuracy = mean(YPred == testIMDS.Labels);
     
     % Displaying confusion chart
-    fig = figure;
-    fig_Position = fig.Position;
-    fig_Position(3) = fig_Position(3)*1.5;
-    fig.Position = fig_Position;
+%     fig = figure;
+%     fig_Position = fig.Position;
+%     fig_Position(3) = fig_Position(3)*1.5;
+%     fig.Position = fig_Position;
     cm = confusionchart(testIMDS.Labels,YPred,'RowSummary','row-normalized','ColumnSummary','column-normalized');
     
     t = [network+" Layer: "+layer_name,"Kernel: "+kernel(n),"Seed: "+sval];
@@ -131,10 +144,10 @@ function [accuracies, svms] = getSvms(net,network,l,seed)
     filename = "svm_data_"+network+"/t"+tval+"/"+"t"+tval+"_"+network+"_"+layer_name+"_s"+sval;
     cm_name = "svm_data_"+network+"/t"+tval+"/"+"t"+tval+"_cm_"+network+"_"+layer_name+"_s"+sval;
     save(filename, 'accuracy','fScore','avg_f_score');
-    print(fig,cm_name,'-dpng');
+    saveas(cm,cm_name,'png');
     
-    accuracies(i) = accuracy;
-    svms(i) = filename;
+    accuracies(n) = accuracy;
+    svms(n) = filename;
     
     end    
 
