@@ -21,18 +21,18 @@ function [] = netFeatureSVM()
     for s=1:size(seeds,2)
         
          data_name = "svm_data_"+network+"/datastore/"+network+"_DS_s"+num2str(seeds(s));
-%         [training_Set, validation_Set, testing_Set] = getOriginalDataSplits(dir,seeds(s),data_name);
+         [training_Set, validation_Set, testing_Set] = getOriginalDataSplits(dir,seeds(s),data_name);
         
-        T= imageDatastore(dir+"/training","IncludeSubfolders",true, "LabelSource","foldernames");
-        V = imageDatastore(dir+"/validation","IncludeSubfolders",true,"LabelSource","foldernames");
-        training_Set = T; %imageDatastore([T.Files; V.Files],"IncludeSubfolders",true,"LabelSource","foldernames");
-        testing_Set = imageDatastore(dir+"/testing","IncludeSubfolders",true,"LabelSource","foldernames");
-        save(data_name, 'training_Set','testing_Set');
+%         T= imageDatastore(dir+"/training","IncludeSubfolders",true, "LabelSource","foldernames");
+%         V = imageDatastore(dir+"/validation","IncludeSubfolders",true,"LabelSource","foldernames");
+%         training_Set = T; %imageDatastore([T.Files; V.Files],"IncludeSubfolders",true,"LabelSource","foldernames");
+%         testing_Set = imageDatastore(dir+"/testing","IncludeSubfolders",true,"LabelSource","foldernames");
+%         save(data_name, 'training_Set','testing_Set');
         
 %         % Uncomment for OVER SAMPLING training set
 %         training_Set = OverSampleTrainingSet(training_Set);
 %         % Re-save the datastore
-%         save(data_name, 'training_Set','validation_Set','testing_Set');
+         save(data_name, 'training_Set','validation_Set','testing_Set');
 
         for l=1:size(layers,2)
             [acc, svm] = getSvms(net,network,layers(l),seeds(s));
